@@ -38,7 +38,35 @@ const resolvers = {
 
             return { token, user }
 
+        },
+
+        saveBook: async (parent, { authors, title, description, bookId, image, link }) => {
+
+
+
+            const book = {
+                authors: authors,
+                title: title,
+                description: description,
+                bookId: bookId,
+                image: image,
+                link: link,
+            }
+
+            //CHANGE USERNAME TO JWT USERNAME
+            const user = await User.findOneAndUpdate(
+                { username: ananfro },
+                { $addToSet: { savedBooks: book } },
+                {
+                    new: true,
+                }
+            );
+
+            return user;
+
         }
+
+        //ADD REMOVE BOOK
 
     },
 
