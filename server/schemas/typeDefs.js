@@ -12,12 +12,12 @@ type Mutation {
 }
 
 input BookData {
-    authors: String!
-    title: String!
-    description: String!
+    authors: [String]
+    title: String
+    description: String
     bookId: String!
-    image: String!
-    link: String!
+    image: String
+    link: String
 }
 
 type User {
@@ -29,8 +29,8 @@ type User {
 }
 
 type Book {
-    bookId: String
-    author: [String]
+    bookId: String!
+    authors: [String]
     description: String
     title: String
     image: String
@@ -38,8 +38,8 @@ type Book {
 }
 
 type Auth {
-    token: String
-    user: String
+    token: String!
+    user: String!
 }
 
 `;
