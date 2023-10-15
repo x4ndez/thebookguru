@@ -40,35 +40,43 @@ const resolvers = {
 
         },
 
-        saveBook: async (parent, { authors, title, description, bookId, image, link }) => {
+        saveBook: async (parent, { body }, contextValue) => {
 
-
-
-            const book = {
-                authors: authors,
-                title: title,
-                description: description,
-                bookId: bookId,
-                image: image,
-                link: link,
-            }
+            console.log(contextValue);
 
             //CHANGE USERNAME TO JWT USERNAME
-            const user = await User.findOneAndUpdate(
-                { username: ananfro },
-                { $addToSet: { savedBooks: book } },
-                {
-                    new: true,
-                }
+            // const user = await User.findOneAndUpdate(
+            //     { username: contextValue.user._id },
+            //     { $addToSet: { savedBooks: book } },
+            //     {
+            //         new: true,
+            //     }
+            // );
+
+            if (contextValue.user) {
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: contextValue.user._id },
+                    { $addToSet: { savedBooks: body } },
+                    { new: true, runValidators: true }
+                );
+            }
+            throw AuthenticationError;
+        },
+
+        removeBook: async (parent, { bookId }, contextValue) => {
+
+            const updatedUser = await User.findOneAndUpdate(
+                { _id: contextValue.user._id },
+                { $pull: { savedBooks: { bookId: bookId } } },
+                { new: true }
             );
+            if (!updatedUser) {
+                throw AuthenticationError;
+            }
 
-            return user;
+        },
 
-        }
-
-        //ADD REMOVE BOOK
-
-    },
+    }
 
 }
 
