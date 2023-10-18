@@ -7,6 +7,10 @@ const resolvers = {
 
         me: async () => {
             return User.find().populate("savedBooks");
+        },
+
+        userData: async (parent, { username }) => {
+            return User.findOne({ username }).populate("savedBooks");
         }
 
     },

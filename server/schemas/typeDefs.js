@@ -1,7 +1,4 @@
 const typeDefs = `
-type Query {
-    name: String!
-}
 
 input BookData {
     authors: [String]
@@ -12,6 +9,7 @@ input BookData {
 }
 type Query {
     me: [User]
+    userData(username: String): User
     }
 
 
