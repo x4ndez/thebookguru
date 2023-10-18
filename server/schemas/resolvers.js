@@ -40,39 +40,44 @@ const resolvers = {
 
         },
 
-        saveBook: async (parent, { body }, contextValue) => {
+        saveBook: async (parent, { data }, contextValue) => {
 
-            console.log(contextValue);
-
-            //CHANGE USERNAME TO JWT USERNAME
-            // const user = await User.findOneAndUpdate(
-            //     { username: contextValue.user._id },
-            //     { $addToSet: { savedBooks: book } },
-            //     {
-            //         new: true,
-            //     }
-            // );
+            // console.log(data);
+            // console.log("saveBook error");
 
             if (contextValue.user) {
+                // console.log("saveBook error");
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: contextValue.user._id },
-                    { $addToSet: { savedBooks: body } },
-                    { new: true, runValidators: true }
+                    { $addToSet: { savedBooks: data } },
+                    {
+                        new: true,
+                        runValidators: true
+                    }
                 );
+
+                return updatedUser;
+
             }
+            console.log("auth error");
             throw AuthenticationError;
         },
 
         removeBook: async (parent, { bookId }, contextValue) => {
 
-            const updatedUser = await User.findOneAndUpdate(
-                { _id: contextValue.user._id },
-                { $pull: { savedBooks: { bookId: bookId } } },
-                { new: true }
-            );
-            if (!updatedUser) {
-                throw AuthenticationError;
+            if (contextValue.user) {
+
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: contextValue.user._id },
+                    { $pull: { savedBooks: { bookId: bookId } } },
+                    { new: true }
+                );
+
+                return updatedUser;
+
             }
+
+            throw AuthenticationError;
 
         },
 

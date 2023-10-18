@@ -1,6 +1,7 @@
 const path = require('path');
 const db = require('./config/connection'); // CONNECT TO MONGODB
 const routes = require('./routes');
+// const cors = require("cors");
 
 // EXPRESS
 const express = require('express');
@@ -24,13 +25,14 @@ const startApolloServer = async () => {
 
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
+  // app.use(cors());
 
-  //NOTE: ENABLE THIS WHEN FIXING MIDDLEWARE.
-  // app.use("/graphql", expressMiddleware(apolloServer, {
-  //   context: authMiddleware,
-  // }));
+  // NOTE: ENABLE THIS WHEN FIXING MIDDLEWARE.
+  app.use("/graphql", expressMiddleware(apolloServer, {
+    context: authMiddleware,
+  }));
 
-  app.use("/graphql", expressMiddleware(apolloServer));
+  // app.use("/graphql", expressMiddleware(apolloServer));
 
   // if we're in production, serve client/build as static assets
   if (process.env.NODE_ENV === 'production') {
